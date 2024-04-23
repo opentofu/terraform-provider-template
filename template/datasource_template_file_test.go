@@ -99,20 +99,23 @@ func TestValidateVarsAttribute(t *testing.T) {
 // accessing it parallel during their lang.Eval() runs.
 //
 // Before fix, test fails under `go test -race`
-func TestTemplateSharedMemoryRace(t *testing.T) {
+func TemplateSharedMemoryRace(t *testing.T) {
+	out, err := execute("don't panic!", map[string]interface{}{})
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+	if out != "don't panic!" {
+		t.Fatalf("bad output: %s", out)
+	}
+}
+func TestTemplateSharedMemoryRace(tt *testing.T) {
 	var wg sync.WaitGroup
 	for i := 0; i < 100; i++ {
 		wg.Add(1)
-		go func(t *testing.T, i int) {
-			out, err := execute("don't panic!", map[string]interface{}{})
-			if err != nil {
-				t.Fatalf("err: %s", err)
-			}
-			if out != "don't panic!" {
-				t.Fatalf("bad output: %s", out)
-			}
+		go func() {
+			TemplateSharedMemoryRace(tt)
 			wg.Done()
-		}(t, i)
+		}()
 	}
 	wg.Wait()
 }

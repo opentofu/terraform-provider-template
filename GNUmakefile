@@ -4,8 +4,11 @@ WEBSITE_REPO=github.com/hashicorp/terraform-website
 PKG_NAME=template
 
 default: build
+gomodenv:
+	export GO111MODULE=on
+	export GOFLAGS=-mod=vendor
 
-build: fmtcheck
+build: fmtcheck gomodenv
 	go install
 
 test: fmtcheck
