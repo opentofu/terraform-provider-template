@@ -57,7 +57,7 @@ func TestRender(t *testing.T) {
 
 	for _, tt := range testCases {
 		r.UnitTest(t, r.TestCase{
-			Providers: testProviders,
+			ProviderFactories: testProviders,
 			Steps: []r.TestStep{
 				{
 					Config: tt.ResourceBlock,
@@ -73,7 +73,7 @@ func TestRender(t *testing.T) {
 // From GH-13572, Correctly handle panic on a misconfigured cloudinit part
 func TestRender_handlePanic(t *testing.T) {
 	r.UnitTest(t, r.TestCase{
-		Providers: testProviders,
+		ProviderFactories: testProviders,
 		Steps: []r.TestStep{
 			{
 				Config:      testCloudInitConfig_misconfiguredParts,

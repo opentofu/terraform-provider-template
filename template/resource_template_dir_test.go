@@ -75,7 +75,7 @@ func TestTemplateDirRendering(t *testing.T) {
 
 		// Run test case.
 		r.UnitTest(t, r.TestCase{
-			Providers: testProviders,
+			ProviderFactories: testProviders,
 			Steps: []r.TestStep{
 				{
 					Config: fmt.Sprintf(templateDirRenderingConfig, in, out, tt.vars),

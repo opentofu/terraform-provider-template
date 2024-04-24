@@ -11,8 +11,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var testProviders = map[string]schema.Provider{
-	"template": Provider(),
+var testProviders = map[string]func() (*schema.Provider, error){
+	"template": func() (*schema.Provider, error) {
+		return Provider(), nil
+	},
 }
 
 func TestTemplateRendering(t *testing.T) {
@@ -34,7 +36,7 @@ func TestTemplateRendering(t *testing.T) {
 			configSrc := testTemplateConfig(tt.template, tt.vars)
 			t.Logf("testing with this generated config:\n%s", configSrc)
 			r.UnitTest(t, r.TestCase{
-				Providers: testProviders,
+				ProviderFactories: testProviders,
 				Steps: []r.TestStep{
 					{
 						Config: configSrc,
