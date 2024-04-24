@@ -5,13 +5,10 @@ import (
 	"compress/gzip"
 	"encoding/base64"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"io"
 	"mime/multipart"
 	"net/textproto"
-	"strconv"
-
-	"github.com/hashicorp/terraform/helper/hashcode"
-	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func dataSourceCloudinitConfig() *schema.Resource {
@@ -69,7 +66,7 @@ func dataSourceCloudinitConfigRead(d *schema.ResourceData, meta interface{}) err
 	}
 
 	d.Set("rendered", rendered)
-	d.SetId(strconv.Itoa(hashcode.String(rendered)))
+	d.SetId(fmt.Sprintf("%d", schema.HashString(rendered)))
 	return nil
 }
 

@@ -6,14 +6,13 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform/helper/pathorcontents"
 	"io"
 	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
-
-	"github.com/hashicorp/terraform/helper/pathorcontents"
-	"github.com/hashicorp/terraform/helper/schema"
 )
 
 func resourceDir() *schema.Resource {

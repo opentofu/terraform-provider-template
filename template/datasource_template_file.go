@@ -1,17 +1,19 @@
 package template
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/hashicorp/hcl2/hcl"
-	"github.com/hashicorp/hcl2/hcl/hclsyntax"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform/helper/pathorcontents"
-	"github.com/hashicorp/terraform/helper/schema"
 	tflang "github.com/hashicorp/terraform/lang"
 	"github.com/zclconf/go-cty/cty"
 	ctyconvert "github.com/zclconf/go-cty/cty/convert"
@@ -19,7 +21,7 @@ import (
 
 func dataSourceFile() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceFileRead,
+		ReadContext: dataSourceFileRead,
 
 		Schema: map[string]*schema.Schema{
 			"template": {
@@ -46,7 +48,7 @@ func dataSourceFile() *schema.Resource {
 					}
 					return rel
 				},
-				Removed:       "Use the 'template' attribute instead.",
+				Deprecated:    "Use the 'template' attribute instead.",
 				ConflictsWith: []string{"template"},
 			},
 			"vars": {
@@ -65,10 +67,17 @@ func dataSourceFile() *schema.Resource {
 	}
 }
 
-func dataSourceFileRead(d *schema.ResourceData, meta interface{}) error {
+func dataSourceFileRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	rendered, err := renderFile(d)
 	if err != nil {
-		return err
+		return diag.Diagnostics{
+			diag.Diagnostic{
+				Severity:      0,
+				Summary:       "Error while rendering the file",
+				Detail:        err.Error(),
+				AttributePath: nil,
+			},
+		}
 	}
 	d.Set("rendered", rendered)
 	d.SetId(hash(rendered))

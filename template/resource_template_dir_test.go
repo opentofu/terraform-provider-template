@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"errors"
-	r "github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/terraform"
+	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"io/ioutil"
 	"os"
 	"path/filepath"

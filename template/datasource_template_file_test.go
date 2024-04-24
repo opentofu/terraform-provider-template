@@ -2,15 +2,16 @@ package template
 
 import (
 	"fmt"
+	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"strings"
 	"sync"
 	"testing"
 
-	r "github.com/hashicorp/terraform/helper/resource"
-	"github.com/hashicorp/terraform/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
-var testProviders = map[string]terraform.ResourceProvider{
+var testProviders = map[string]schema.Provider{
 	"template": Provider(),
 }
 
